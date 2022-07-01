@@ -108,13 +108,13 @@ class TraceMiddleware implements MiddlewareInterface
         $span->setTag($this->spanTagManager->get('http', 'route'), $route);
         $span->setTag($this->spanTagManager->get('http', 'scheme'), $uri->getScheme());
         $span->setTag($this->spanTagManager->get('http', 'host'), $host);
-        $span->setTag($this->spanTagManager->get('net', 'host.port'), $uri->getPort());
+        $span->setTag($this->spanTagManager->get('net', 'host_port'), $uri->getPort());
         $span->setTag($this->spanTagManager->get('coroutine', 'id'), (string) Coroutine::id());
-        $span->setTag($this->spanTagManager->get('service', 'instance.id'), env('HOSTNAME', $host));
+        $span->setTag($this->spanTagManager->get('service', 'instance_id'), env('HOSTNAME', $host));
 
         foreach ($request->getHeaders() as $key => $value) {
             if (!in_array(strtolower($key), $this->headersBlacklist())) {
-                $span->setTag($this->spanTagManager->get('http', 'request.header') . '.' . $key, implode(', ', $value));
+                $span->setTag($this->spanTagManager->get('http', 'request_header') . '.' . $key, implode(', ', $value));
             }
         }
         return $span;

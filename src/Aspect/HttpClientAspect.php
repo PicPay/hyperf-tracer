@@ -76,6 +76,7 @@ class HttpClientAspect implements AroundInterface
         $method = strtoupper($arguments['keys']['method'] ?? '');
         $uri = $arguments['keys']['uri'] ?? '';
         $host = $base_uri === null ? (parse_url($uri, PHP_URL_HOST) ?? '') : $base_uri->getHost();
+
         $span = $this->startSpan($host, [], SPAN_KIND_RPC_CLIENT);
 
         $span->setTag('category', 'http');
@@ -104,7 +105,7 @@ class HttpClientAspect implements AroundInterface
         $proceedingJoinPoint->arguments['keys']['options'] = $options;
 
         foreach ($options['headers'] as $key => $value) {
-            $span->setTag($this->spanTagManager->get('http', 'request.header') . '.' . $key, $value);
+            $span->setTag($this->spanTagManager->get('http', 'request_header') . '.' . $key, $value);
         }
 
         /** @var PromiseInterface $result */
