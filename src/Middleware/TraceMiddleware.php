@@ -90,7 +90,7 @@ class TraceMiddleware implements MiddlewareInterface
         return $response;
     }
 
-    private function buildSpan(ServerRequestInterface $request): Span
+    protected function buildSpan(ServerRequestInterface $request): Span
     {
         $uri = $request->getUri();
         $target = sprintf('%s?%s', $uri->getPath(), $uri->getQuery());
