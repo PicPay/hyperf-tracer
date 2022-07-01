@@ -61,6 +61,7 @@ trait SpanStarter
         $option['child_of'] = $root->getContext();
         $child = $this->tracer->startSpan($name, $option);
         $child->setTag(SPAN_KIND, $kind);
+        $child->setTag('root.name', $root->getOperationName());
         return $child;
     }
 

@@ -29,6 +29,7 @@ use OpenTracing\Tracer;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 use const OpenTracing\Formats\TEXT_MAP;
+use const OpenTracing\Tags\SPAN_KIND_RPC_CLIENT;
 
 /** @Aspect */
 class HttpClientAspect implements AroundInterface
@@ -75,28 +76,23 @@ class HttpClientAspect implements AroundInterface
         $method = strtoupper($arguments['keys']['method'] ?? '');
         $uri = $arguments['keys']['uri'] ?? '';
         $host = $base_uri === null ? (parse_url($uri, PHP_URL_HOST) ?? '') : $base_uri->getHost();
-        $span = $this->startSpan(
-            sprintf(
-                '%s %s/%s',
-                $method,
-                rtrim((string) ($base_uri ?? ''), '/'),
-                ltrim(parse_url($uri, PHP_URL_PATH) ?? '', '/')
-            )
-        );
+        $span = $this->startSpan($host, [], SPAN_KIND_RPC_CLIENT);
 
         $span->setTag('category', 'http');
         $span->setTag('component', 'GuzzleHttp');
         $span->setTag('kind', 'client');
         $span->setTag('source', $proceedingJoinPoint->className . '::' . $proceedingJoinPoint->methodName);
-        if ($this->spanTagManager->has('http_client', 'http.url')) {
-            $span->setTag($this->spanTagManager->get('http_client', 'http.url'), $uri);
+
+        if ($this->spanTagManager->has('http', 'url')) {
+            $span->setTag($this->spanTagManager->get('http', 'url'), $uri);
         }
-        if ($this->spanTagManager->has('http_client', 'http.host')) {
-            $span->setTag($this->spanTagManager->get('http_client', 'http.host'), $host);
+        if ($this->spanTagManager->has('http', 'host')) {
+            $span->setTag($this->spanTagManager->get('http', 'host'), $host);
         }
-        if ($this->spanTagManager->has('http_client', 'http.method')) {
-            $span->setTag($this->spanTagManager->get('http_client', 'http.method'), $method);
+        if ($this->spanTagManager->has('http', 'method')) {
+            $span->setTag($this->spanTagManager->get('http', 'method'), $method);
         }
+
         $appendHeaders = [];
         // Injects the context into the wire
         $this->tracer->inject(
@@ -106,6 +102,10 @@ class HttpClientAspect implements AroundInterface
         );
         $options['headers'] = array_replace($options['headers'] ?? [], $appendHeaders);
         $proceedingJoinPoint->arguments['keys']['options'] = $options;
+
+        foreach ($options['headers'] as $key => $value) {
+            $span->setTag($this->spanTagManager->get('http', 'request.header') . '.' . $key, $value);
+        }
 
         /** @var PromiseInterface $result */
         $result = $proceedingJoinPoint->process();
@@ -122,7 +122,7 @@ class HttpClientAspect implements AroundInterface
     {
         return function (ResponseInterface $response) use ($span) {
             $span->setTag(
-                $this->spanTagManager->get('http_client', 'http.status_code'),
+                $this->spanTagManager->get('http', 'status_code'),
                 $response->getStatusCode()
             );
             $span->setTag('otel.status_code', 'OK');
@@ -137,7 +137,7 @@ class HttpClientAspect implements AroundInterface
             }
 
             $span->setTag(
-                $this->spanTagManager->get('http_client', 'http.status_code'),
+                $this->spanTagManager->get('http', 'status_code'),
                 $exception->getResponse()->getStatusCode()
             );
 

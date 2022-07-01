@@ -14,12 +14,13 @@ namespace Hyperf\Tracer;
 use OpenTracing\Span;
 use Throwable;
 use function get_class;
+use const OpenTracing\Tags\ERROR;
 
 trait ExceptionAppender
 {
     private function appendExceptionToSpan(Span $span, Throwable $exception): void
     {
-        $span->setTag('error', true);
+        $span->setTag(ERROR, true);
 
         $span->setTag('otel.status_code', 'ERROR');
         $span->setTag('otel.status_description', $exception->getMessage());
