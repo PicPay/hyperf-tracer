@@ -49,8 +49,8 @@ return [
             'scheme' => 'http.scheme',
             'server_name' => 'http.server_name',
             'status_code' => 'http.status_code',
-            'request.header' => 'http.request.header',
-            'response.header' => 'http.response.header',
+            'request_header' => 'http.request.header',
+            'response_header' => 'http.response.header',
         ],
         'redis' => [
             'arguments' => 'arguments',
@@ -73,11 +73,11 @@ return [
         'service' => [
             'name' => 'service.name',
             'namespace' => 'service.namespace',
-            'instance.id' => 'service.instance.id',
+            'instance_id' => 'service.instance.id',
             'version' => 'service.version',
         ],
         'net' => [
-            'host.port' => 'net.host.port',
+            'host_port' => 'net.host.port',
         ],
     ],
 ];
