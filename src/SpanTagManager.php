@@ -14,24 +14,26 @@ namespace Hyperf\Tracer;
 class SpanTagManager
 {
     private const DEFAULTS = [
-        'http_client' => [
-            'http.url' => 'http.url',
-            'http.host' => 'http.host',
-            'http.method' => 'http.method',
-            'http.status_code' => 'http.status_code',
+        'http' => [
+            'url' => 'http.url',
+            'host' => 'http.host',
+            'method' => 'http.method',
+            'target' => 'http.target',
+            'route' => 'http.route',
+            'scheme' => 'http.scheme',
+            'server_name' => 'http.server_name',
+            'status_code' => 'http.status_code',
+            'request.header' => 'http.request.header',
+            'response.header' => 'http.response.header',
         ],
         'redis' => [
-            'arguments' => 'db.arguments',
-            'result' => 'db.result',
+            'arguments' => 'arguments',
+            'result' => 'result',
         ],
         'db' => [
             'db.query' => 'db.query',
-            'db.statement' => 'db.sql',
+            'db.statement' => 'db.statement',
             'db.query_time' => 'db.query_time',
-        ],
-        'rpc' => [
-            'path' => 'rpc.path',
-            'status' => 'rpc.status',
         ],
         'exception' => [
             'class' => 'exception.class',
@@ -39,16 +41,17 @@ class SpanTagManager
             'message' => 'exception.message',
             'stack_trace' => 'exception.stack_trace',
         ],
-        'request' => [
-            'path' => 'request.path',
-            'method' => 'request.method',
-            'header' => 'request.header',
-        ],
         'coroutine' => [
             'id' => 'coroutine.id',
         ],
-        'response' => [
-            'status_code' => 'response.status_code',
+        'service' => [
+            'name' => 'service.name',
+            'namespace' => 'service.namespace',
+            'instance.id' => 'service.instance.id',
+            'version' => 'service.version',
+        ],
+        'net' => [
+            'host.port' => 'net.host.port',
         ],
     ];
 
