@@ -11,13 +11,14 @@ declare(strict_types=1);
  */
 namespace Hyperf\Tracer;
 
+use Hyperf\Context\Context;
 use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\Engine\Exception\CoroutineDestroyedException;
 use Hyperf\Utils\ApplicationContext;
-use Hyperf\Context\Context;
 use Hyperf\Utils\Coroutine;
 use OpenTracing\Span;
 use Psr\Http\Message\ServerRequestInterface;
+
 use const OpenTracing\Formats\TEXT_MAP;
 use const OpenTracing\Tags\SPAN_KIND;
 use const OpenTracing\Tags\SPAN_KIND_RPC_CLIENT;
