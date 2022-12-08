@@ -57,8 +57,9 @@ trait SpanStarter
             $root = $this->tracer->startSpan($name, $option);
             $root->setTag(SPAN_KIND, $kind);
 
-            if (! empty($correlation_id = $request->getHeaderLine('X-Request-ID'))) {
-                $root->getContext()->setTraceId($correlation_id);
+            if ($spanContext === null && ! empty($correlationId = $request->getHeaderLine('X-Request-ID'))) {
+                echo "Setting Trace ID to Correlation ID {$correlationId}\n";
+                $root->getContext()->setTraceId($correlationId);
             }
 
             Context::set('tracer.root', $root);
