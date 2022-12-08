@@ -17,12 +17,14 @@ use ReturnTypeWillChange;
 
 class SpanContext implements OTSpanContext
 {
+    private array $baggage;
+
     public function __construct(
         private string $traceId,
         private string $spanId,
         private ?string $parentId = null,
         private ?int $flags = null,
-        private ?array $baggage = null,
+        ?array $baggage = null,
         private ?int $debugId = null,
     ) {
         $this->baggage = $baggage ?? [];
