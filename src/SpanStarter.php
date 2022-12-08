@@ -56,6 +56,11 @@ trait SpanStarter
             }
             $root = $this->tracer->startSpan($name, $option);
             $root->setTag(SPAN_KIND, $kind);
+
+            if (! empty($correlation_id = $request->getHeaderLine('X-Request-ID'))) {
+                $root->getContext()->setTraceId($correlation_id);
+            }
+
             Context::set('tracer.root', $root);
             return $root;
         }
