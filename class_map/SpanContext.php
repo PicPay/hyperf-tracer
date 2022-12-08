@@ -22,9 +22,10 @@ class SpanContext implements OTSpanContext
         private string $spanId,
         private ?string $parentId = null,
         private ?int $flags = null,
-        private array $baggage = [],
+        private ?array $baggage = null,
         private ?int $debugId = null,
     ) {
+        $this->baggage = $baggage ?? [];
     }
 
     /**
