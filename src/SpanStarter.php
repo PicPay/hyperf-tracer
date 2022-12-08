@@ -59,6 +59,7 @@ trait SpanStarter
 
             if ($spanContext === null && ! empty($correlationId = $request->getHeaderLine('X-Request-ID'))) {
                 $correlationId = str_replace('-', '', $correlationId);
+                $correlationId = base_convert($correlationId, 16, 10);
                 echo "Setting Trace ID to Correlation ID {$correlationId}\n";
                 $root->getContext()->setTraceId($correlationId);
             }
