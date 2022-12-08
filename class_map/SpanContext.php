@@ -20,7 +20,7 @@ class SpanContext implements OTSpanContext
     public function __construct(
         private string $traceId,
         private string $spanId,
-        private string $parentId,
+        private ?string $parentId = null,
         private ?int $flags = null,
         private array $baggage = [],
         private ?int $debugId = null,
@@ -71,7 +71,7 @@ class SpanContext implements OTSpanContext
         return $this;
     }
 
-    public function getParentId(): string
+    public function getParentId(): ?string
     {
         return $this->parentId;
     }
