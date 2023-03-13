@@ -128,6 +128,7 @@ class TraceMiddleware implements MiddlewareInterface
         $span->setTag($this->spanTagManager->get('coroutine', 'id'), (string) Coroutine::id());
         $span->setTag($this->spanTagManager->get('request', 'path'), $path);
         $span->setTag($this->spanTagManager->get('request', 'method'), $request->getMethod());
+
         foreach ($request->getHeaders() as $key => $value) {
             if (preg_match($this->sensitive_headers_regex, $key)) {
                 continue;
@@ -135,6 +136,15 @@ class TraceMiddleware implements MiddlewareInterface
 
             $span->setTag($this->spanTagManager->get('request', 'header') . '.' . $key, implode(', ', $value));
         }
+
+        foreach ($request->getAttributes() as $key => $value) {
+            if (! is_string($value) || empty($value)) {
+                continue;
+            }
+
+            $span->setTag("attribute.{$key}", $value);
+        }
+
         return $span;
     }
 
