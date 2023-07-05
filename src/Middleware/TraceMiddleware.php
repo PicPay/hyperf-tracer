@@ -21,6 +21,7 @@ use Hyperf\HttpMessage\Exception\HttpException;
 use Hyperf\Tracer\ExceptionAppender;
 use Hyperf\Tracer\SpanStarter;
 use Hyperf\Tracer\SpanTagManager;
+use Hyperf\Tracer\Support\Uri;
 use Hyperf\Tracer\SwitchManager;
 use Hyperf\Utils\ApplicationContext;
 use Hyperf\Utils\Coroutine;
@@ -150,6 +151,6 @@ class TraceMiddleware implements MiddlewareInterface
 
     protected function getPath(UriInterface $uri): string
     {
-        return $uri->getPath();
+        return Uri::sanitize($uri->getPath());
     }
 }
