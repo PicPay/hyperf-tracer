@@ -30,26 +30,18 @@ class SpanContext implements OTSpanContext
         $this->baggage = $baggage ?? [];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     #[ReturnTypeWillChange]
     public function getIterator(): ArrayIterator|iterable
     {
         return new ArrayIterator($this->baggage);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBaggageItem(string $key): ?string
     {
         return $this->baggage[$key] ?? null;
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return SpanContext
      */
     public function withBaggageItem(string $key, string $value): OTSpanContext
