@@ -11,7 +11,6 @@ declare(strict_types=1);
  */
 namespace Hyperf\Tracer\Aspect;
 
-use Hyperf\Di\Annotation\Aspect;
 use Hyperf\Di\Aop\AroundInterface;
 use Hyperf\Di\Aop\ProceedingJoinPoint;
 use Hyperf\Di\Exception\Exception;
@@ -22,7 +21,6 @@ use Hyperf\Tracer\SwitchManager;
 use OpenTracing\Tracer;
 use Throwable;
 
-/** @Aspect */
 class TraceAnnotationAspect implements AroundInterface
 {
     use SpanStarter;

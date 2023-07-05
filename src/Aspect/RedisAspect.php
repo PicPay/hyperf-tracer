@@ -11,7 +11,6 @@ declare(strict_types=1);
  */
 namespace Hyperf\Tracer\Aspect;
 
-use Hyperf\Di\Annotation\Aspect;
 use Hyperf\Di\Aop\AroundInterface;
 use Hyperf\Di\Aop\ProceedingJoinPoint;
 use Hyperf\Di\Exception\Exception;
@@ -24,7 +23,6 @@ use JsonException;
 use OpenTracing\Tracer;
 use Throwable;
 
-/** @Aspect */
 class RedisAspect implements AroundInterface
 {
     use SpanStarter;

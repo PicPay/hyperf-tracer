@@ -16,7 +16,6 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Promise\Create;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Uri;
-use Hyperf\Di\Annotation\Aspect;
 use Hyperf\Di\Aop\AroundInterface;
 use Hyperf\Di\Aop\ProceedingJoinPoint;
 use Hyperf\Di\Exception\Exception;
@@ -32,7 +31,6 @@ use Throwable;
 
 use const OpenTracing\Formats\TEXT_MAP;
 
-/** @Aspect */
 class HttpClientAspect implements AroundInterface
 {
     use SpanStarter;
