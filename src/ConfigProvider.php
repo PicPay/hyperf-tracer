@@ -12,7 +12,11 @@ declare(strict_types=1);
 namespace Hyperf\Tracer;
 
 use GuzzleHttp\Client;
+use Hyperf\Tracer\Aspect\HttpClientAspect;
+use Hyperf\Tracer\Aspect\MongoCollectionAspect;
+use Hyperf\Tracer\Aspect\RedisAspect;
 use Hyperf\Tracer\Listener\DbQueryExecutedListener;
+use Hyperf\Tracer\Middleware\TraceMiddleware;
 use Jaeger\SpanContext;
 use Jaeger\ThriftUdpTransport;
 use OpenTracing\Tracer;
@@ -28,8 +32,16 @@ class ConfigProvider
                 SpanTagManager::class => SpanTagManagerFactory::class,
                 Client::class => Client::class,
             ],
+            'aspects' => [
+                HttpClientAspect::class,
+                MongoCollectionAspect::class,
+                RedisAspect::class,
+            ],
             'listeners' => [
                 DbQueryExecutedListener::class,
+            ],
+            'middlewares' => [
+                TraceMiddleware::class,
             ],
             'annotations' => [
                 'scan' => [
