@@ -1,0 +1,18 @@
+sonar:
+  enabled: true
+  type: other
+build:
+  enabled: false
+sast:
+  enabled: true
+
+steps:
+  - name: unit-tests
+    image: 289208114389.dkr.ecr.us-east-1.amazonaws.com/picpay-dev/hyperf:php8.2-swoole5.0-dev
+    environment:
+      COMPOSER_AUTH:
+        from_secret: composer-auth
+        key: COMPOSER_AUTH
+    commands:
+      - composer install
+      - composer test
