@@ -23,6 +23,7 @@ use Hyperf\Di\Exception\Exception;
 use Hyperf\Tracer\ExceptionAppender;
 use Hyperf\Tracer\SpanStarter;
 use Hyperf\Tracer\SpanTagManager;
+use Hyperf\Tracer\Support\Uri as SupportUri;
 use Hyperf\Tracer\SwitchManager;
 use OpenTracing\Span;
 use OpenTracing\Tracer;
@@ -81,7 +82,7 @@ class HttpClientAspect implements AroundInterface
                 '%s %s/%s',
                 $method,
                 rtrim((string) ($base_uri ?? ''), '/'),
-                ltrim(parse_url($this->clearUri($uri), PHP_URL_PATH) ?? '', '/')
+                ltrim(parse_url(SupportUri::sanitize($uri), PHP_URL_PATH) ?? '', '/')
             )
         );
 
@@ -117,21 +118,6 @@ class HttpClientAspect implements AroundInterface
         $span->finish();
 
         return $result;
-    }
-
-    public function clearUri(string $uri): string
-    {
-        return preg_replace(
-            [
-                '/\/(?<=\/)([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12})(?=\/)?/',
-                '/\/(?<=\/)\d+(?=\/)?/',
-            ],
-            [
-                '/<UUID>',
-                '/<NUMBER>',
-            ],
-            $uri
-        );
     }
 
     private function onFullFilled(Span $span): callable
