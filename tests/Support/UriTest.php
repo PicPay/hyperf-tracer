@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @internal
  */
-final class HttpClientAspectTest extends TestCase
+final class UriTest extends TestCase
 {
     public function testSanitizeNumbers(): void
     {
